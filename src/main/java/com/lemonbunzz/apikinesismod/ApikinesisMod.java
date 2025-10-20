@@ -1,9 +1,11 @@
 package com.lemonbunzz.apikinesismod;
 
+import com.lemonbunzz.apikinesismod.commands.ApikineticDebug;
 import com.lemonbunzz.apikinesismod.item.ModItems;
 import com.lemonbunzz.apikinesismod.item.ModToolsCreativeTabs;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,14 +26,17 @@ public class ApikinesisMod
     public ApikinesisMod(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
-        modEventBus.addListener(this::onServerStarting);
+        IEventBus forgeEventbus = MinecraftForge.EVENT_BUS;
         //Items
         ModItems.register(modEventBus);
         ModToolsCreativeTabs.register(modEventBus);
-
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(ModItems::addCreative);
+
+        forgeEventbus.addListener(ApikinesisMod::onRegisterCommands);
+
+        //unwanted Child
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
@@ -40,5 +45,10 @@ public class ApikinesisMod
     {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
+    }
+
+    @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        ApikineticDebug.register(event.getDispatcher());
     }
 }

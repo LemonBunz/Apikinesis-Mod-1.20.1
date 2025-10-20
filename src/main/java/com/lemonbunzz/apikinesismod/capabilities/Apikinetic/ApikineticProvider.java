@@ -8,7 +8,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public class ApikineticProvider implements ICapabilitySerializable<CompoundTag> {
     private final ApikineticData apikineticData = new ApikineticData();
-    private final LazyOptional<IApikinetic> optional = LazyOptional.of(() -> apikineticData);
+    private final LazyOptional<ApikineticData> optional = LazyOptional.of(() -> apikineticData);
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {

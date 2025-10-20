@@ -25,7 +25,6 @@ public class ModItems {
     public static void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(BEE_STAFF);
-
         }
     }
 }

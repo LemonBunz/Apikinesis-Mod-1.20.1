@@ -4,13 +4,13 @@ import net.minecraft.nbt.CompoundTag;
 
 public class  ApikineticData implements IApikinetic {
     private boolean isApikinetic = false;
-    private int energyPower = 100;
+    private int energyPoint = 100;
 
-    public int getPowerEnergy(){
-        return energyPower;
+    public int getEnergyPoint(){
+        return energyPoint;
     }
-    public void setPowerEnergy(int value) {
-        this.energyPower = value;
+    public void setEnergyPoint(int value) {
+        this.energyPoint = value;
     };
 
     public boolean isApikinetic() {
@@ -22,13 +22,13 @@ public class  ApikineticData implements IApikinetic {
 
     // Save data to NBT
     public void saveNBTData(CompoundTag tag) {
-        tag.putBoolean("isApikinetic", isApikinetic);
-        tag.putInt("energy", energyPower);
+        tag.putBoolean("isApikinetic", this.isApikinetic);
+        tag.putInt("energyPoint", this.energyPoint);
     }
 
     // Load data from NBT
     public void loadNBTData(CompoundTag tag) {
         isApikinetic = tag.getBoolean("isApikinetic");
-        energyPower = tag.getInt("energyPower");
+        energyPoint = tag.getInt("energyPoint");
     }
 }
