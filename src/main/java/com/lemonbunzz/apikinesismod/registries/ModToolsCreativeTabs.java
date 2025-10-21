@@ -1,4 +1,4 @@
-package com.lemonbunzz.apikinesismod.item;
+package com.lemonbunzz.apikinesismod.registries;
 
 import com.lemonbunzz.apikinesismod.ApikinesisMod;
 import net.minecraft.core.registries.Registries;

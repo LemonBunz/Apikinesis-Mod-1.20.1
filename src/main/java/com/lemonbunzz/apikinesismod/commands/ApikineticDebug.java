@@ -28,6 +28,16 @@ public class ApikineticDebug {
                         .then(Commands.argument("value", IntegerArgumentType.integer()))
                             .executes(ApikineticDebug::setEnergyPoint))
 
+                //Command: /apikinetic set_max_energy <value>
+               .then(Commands.literal("set_max_energy")
+                        .then(Commands.argument("value", IntegerArgumentType.integer()))
+                        .executes(ApikineticDebug::setMaxEnergyPoint))
+
+               //Command: /apikinetic set_max_energy <value>
+//               .then(Commands.literal("set_max_energy")
+//                        .then(Commands.argument("value", IntegerArgumentType.integer()))
+//                        .executes(ApikineticDebug::setEnergyPoint))
+
                 //Command: /apikinetic toggle
                 .then(Commands.literal("toggle")
                          .executes(ApikineticDebug::toggle))
@@ -40,7 +50,7 @@ public class ApikineticDebug {
         player.getCapability(ApikineticCapability.APIKINETIC).ifPresent(data -> {
             source.sendSuccess(
                     () -> Component.literal("[DEBUG] isApikinetic=" + data.isApikinetic()
-                            + "  energyPower=" + data.getEnergyPoint()),
+                            + "  energyPower=" + data.getEnergyPoint() + "/" + data.getMaxEnergyPoint()),
                     false
             );
         });
@@ -62,14 +72,28 @@ public class ApikineticDebug {
         return Command.SINGLE_SUCCESS;
     }
 
+    private static int setMaxEnergyPoint(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        CommandSourceStack source = context.getSource();
+        Player player = source.getPlayerOrException();
+        int newValue = IntegerArgumentType.getInteger(context, "value");
+
+        player.getCapability(ApikineticCapability.APIKINETIC).ifPresent(data -> {
+            data.setMaxEnergyPoint(newValue);
+            source.sendSuccess(
+                    () -> Component.literal("Set Max Energy Point to" + data.getMaxEnergyPoint()),
+                    false
+            );
+        });
+        return Command.SINGLE_SUCCESS;
+    }
+
     private static int toggle(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
         CommandSourceStack source = context.getSource();
         Player player = source.getPlayerOrException();
         player.getCapability(ApikineticCapability.APIKINETIC).ifPresent(data -> {
             data.setApikinetic(!data.isApikinetic());
             source.sendSuccess(
-                    () -> Component.literal("[DEBUG] isApikinetic=" + data.isApikinetic()
-                            + "  energyPower=" + data.getEnergyPoint()),
+                    () ->Component.literal("Set Apikinetic to" + data.isApikinetic()),
                     false
             );
         });

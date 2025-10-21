@@ -1,6 +1,7 @@
-package com.lemonbunzz.apikinesismod.item;
+package com.lemonbunzz.apikinesismod.registries;
 
 import com.lemonbunzz.apikinesismod.ApikinesisMod;
+import com.lemonbunzz.apikinesismod.item.ModBeeStaff;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -19,12 +20,13 @@ public class ModItems {
     }
 
     public static final RegistryObject<Item> BEE_STAFF = ITEMS.register("bee_staff",
-            () -> new Item(new Item.Properties().stacksTo(1)));
+            () -> new ModBeeStaff(new ModBeeStaff.Properties().stacksTo(1)));
 
     @SubscribeEvent
     public static void addCreative(BuildCreativeModeTabContentsEvent event) {
         if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
             event.accept(BEE_STAFF);
+
         }
     }
 }

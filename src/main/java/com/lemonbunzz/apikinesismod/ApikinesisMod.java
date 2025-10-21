@@ -1,8 +1,8 @@
 package com.lemonbunzz.apikinesismod;
 
 import com.lemonbunzz.apikinesismod.commands.ApikineticDebug;
-import com.lemonbunzz.apikinesismod.item.ModItems;
-import com.lemonbunzz.apikinesismod.item.ModToolsCreativeTabs;
+import com.lemonbunzz.apikinesismod.registries.ModItems;
+import com.lemonbunzz.apikinesismod.registries.ModToolsCreativeTabs;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
