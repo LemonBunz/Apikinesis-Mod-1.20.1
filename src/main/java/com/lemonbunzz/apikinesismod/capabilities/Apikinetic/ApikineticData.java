@@ -7,14 +7,8 @@ public class  ApikineticData implements IApikinetic {
     private int energyPoint = 100;
     private int maxEnergyPoint = 100;
     private int energyRegenRate = 10; //energy% per second
-
-    public int getEnergyPoint(){
-        return energyPoint;
-    }
-    public void setEnergyPoint(int value) {
-        this.energyPoint = value;
-    };
-
+    private ApikineticControlledBees availableBees = new ApikineticControlledBees(5);
+    //Apikinetic Status
     public boolean isApikinetic() {
         return this.isApikinetic;
     }
@@ -22,19 +16,28 @@ public class  ApikineticData implements IApikinetic {
         this.isApikinetic = value;
     }
 
+    //Energy Manager
+    public int getEnergyPoint(){
+        return energyPoint;
+    }
+    public void setEnergyPoint(int value) {
+        this.energyPoint = value;
+    };
     public int getMaxEnergyPoint(){
         return maxEnergyPoint;
     }
     public void setMaxEnergyPoint(int value) {
         this.maxEnergyPoint = value;
     };
-
     public int getEnergyRegenRate(){
         return energyRegenRate;
     }
     public void setEnergyRegenRate(int value) {
         this.energyRegenRate = value;
     };
+
+    //Controlled Bees Controllers
+    public ApikineticControlledBees getAvailableBees() { return availableBees; }
 
     // Save data to NBT
     public void saveNBTData(CompoundTag tag) {
@@ -52,3 +55,5 @@ public class  ApikineticData implements IApikinetic {
         energyRegenRate = tag.getInt("energyPoint");
     }
 }
+
+
