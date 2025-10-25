@@ -1,6 +1,7 @@
 package com.lemonbunzz.apikinesismod.item;
 
 import com.lemonbunzz.apikinesismod.capabilities.Apikinetic.ApikineticCapability;
+import com.lemonbunzz.apikinesismod.capabilities.Apikinetic.ApikineticControlledBees;
 import com.lemonbunzz.apikinesismod.capabilities.ControlledBee.ControlledBeeCapability;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -24,6 +25,7 @@ public class ModBeeStaff extends Item {
         if (!level.isClientSide) {
             player.getCapability(ApikineticCapability.APIKINETIC).ifPresent(data -> {
                 int ep = data.getEnergyPoint();
+                ApikineticControlledBees AvailableBees = data.getAvailableBees();
                 if (data.isApikinetic()) {
                     if (data.getEnergyPoint() >= epCost) {
                         Bee newBee = EntityType.BEE.create(level);
@@ -31,10 +33,14 @@ public class ModBeeStaff extends Item {
                             newBee.moveTo(player.getX(), player.getY() + 1, player.getZ(), player.getYRot(), 0);
                             level.addFreshEntity(newBee);
                             data.setEnergyPoint(ep - epCost);
+                            //test section
+                            data.controlBee(newBee, player.getUUID());
 
                             newBee.getCapability(ControlledBeeCapability.CONTROLLED).ifPresent(controlled -> {
                                 String controlledby = controlled.getControlledBy() != null ? controlled.getControlledBy().toString() : "no owner";
-                                player.sendSystemMessage(Component.literal("[Debug] COntrolled By " + controlledby + controlled.getIsControlled()));
+                                player.sendSystemMessage(Component.literal(
+                                        "[Debug] Cntrolled By " + controlledby +  " " + controlled.getIsControlled()
+                                ));
                             });
                         }
                     } else {

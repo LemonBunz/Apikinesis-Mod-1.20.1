@@ -1,9 +1,10 @@
 package com.lemonbunzz.apikinesismod.capabilities.Apikinetic;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.UUID;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
+
+import java.util.*;
 
 public class ApikineticControlledBees {
     private List<BeeData> controllableBees;
@@ -14,10 +15,20 @@ public class ApikineticControlledBees {
         this.maxCap = max;
     }
 
+    public Collection<BeeData> getControllableBees() {
+        return controllableBees;
+    }
+
     public boolean canControlMoreBees() {
         return controllableBees.size() < maxCap;
     }
 
+    public int setMax(int value) {
+        return this.maxCap = value;
+    }
+    public int getMax() {
+        return this.maxCap;
+    }
     public void register(UUID uuid) {
         //TODO: check if the bee has already been controlled by someone
         if (this.canControlMoreBees()) {
@@ -38,19 +49,55 @@ public class ApikineticControlledBees {
         };
     }
 
-    public void clearAll() {
+    public void clearAllControllableBees() {
         controllableBees.clear();
+    }
+
+    public CompoundTag saveNBT() {
+        CompoundTag tag = new CompoundTag();
+        tag.putInt("maxCap", this.maxCap);
+
+        ListTag beeList = new ListTag();
+        for (BeeData bee : this.controllableBees) {
+            beeList.add(bee.saveNBT());
+        }
+
+        tag.put("controlledBees", beeList);
+        return tag;
+    }
+
+    public void loadNBT(CompoundTag tag) {
+        this.clearAllControllableBees();
+        if (tag.contains("controlledBees", Tag.TAG_LIST)) {
+            tag.getInt("maxCap");
+            ListTag beeList = tag.getList("controlledBees", Tag.TAG_COMPOUND);
+            for (int i = 0; i < beeList.size(); i++) {
+                CompoundTag beeTag = beeList.getCompound(i);
+                controllableBees.add(BeeData.loadNBT(beeTag));
+            }
+        }
     }
 }
 
 class BeeData {
-    private UUID uuid;
+    private UUID beeUUID;
 
-    public BeeData(UUID newUuid) {
-        this.uuid = newUuid;
+    public BeeData(UUID newBeeUuid) {
+        this.beeUUID = newBeeUuid;
     };
 
     public UUID getUuid() {
-        return uuid;
+        return this.beeUUID;
+    }
+
+    public CompoundTag saveNBT() {
+        CompoundTag tag = new CompoundTag();
+        if (this.beeUUID != null) tag.putUUID("beeUUID", this.beeUUID);
+        return tag;
+    }
+
+    public static BeeData loadNBT(CompoundTag tag) {
+        UUID uuid = tag.hasUUID("beeUUID") ? tag.getUUID("beeUUID") : null;
+        return new BeeData(uuid);
     }
 }

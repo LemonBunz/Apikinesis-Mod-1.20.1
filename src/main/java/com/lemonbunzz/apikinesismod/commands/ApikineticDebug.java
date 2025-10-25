@@ -49,8 +49,11 @@ public class ApikineticDebug {
         Player player = source.getPlayerOrException();
         player.getCapability(ApikineticCapability.APIKINETIC).ifPresent(data -> {
             source.sendSuccess(
-                    () -> Component.literal("[DEBUG] isApikinetic=" + data.isApikinetic()
-                            + "  energyPower=" + data.getEnergyPoint() + "/" + data.getMaxEnergyPoint()),
+                    () -> Component.literal(
+                            "[DEBUG]\nisApikinetic=" + data.isApikinetic()
+                            + "\nenergyPower=" + data.getEnergyPoint() + "/" + data.getMaxEnergyPoint()
+                            + "\nNo of available bees=" + data.getAvailableBees().getControllableBees().size() + "/" + data.getAvailableBees().getMax()
+                    ) ,
                     false
             );
         });

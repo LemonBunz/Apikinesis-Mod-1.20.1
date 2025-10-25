@@ -17,6 +17,7 @@ public class ApikineticCapability {
     public static Capability<ApikineticData> APIKINETIC = null;
 
     @SubscribeEvent
+    @SuppressWarnings({"'ResourceLocation(java.lang.String, java.lang.String)' is deprecated since version 1.20.6 and marked for removal"})
     public static void attachApikineticCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Player) {
             APIKINETIC = CapabilityManager.get(new CapabilityToken<>() {});
@@ -27,13 +28,21 @@ public class ApikineticCapability {
 
     @SubscribeEvent
     public static void onPlayerClone(PlayerEvent.Clone event) {
-        event.getOriginal().getCapability(ApikineticCapability.APIKINETIC).ifPresent(oldData -> {
-            event.getEntity().getCapability(ApikineticCapability.APIKINETIC).ifPresent(newData -> {
+        System.out.println("Player Cloned");
+        Player oldPlayer = event.getOriginal();
+        Player newPlayer = event.getEntity();
+
+        oldPlayer.reviveCaps();
+
+        oldPlayer.getCapability(ApikineticCapability.APIKINETIC).ifPresent(oldData -> {
+            newPlayer.getCapability(ApikineticCapability.APIKINETIC).ifPresent(newData -> {
                 CompoundTag tag = new CompoundTag();
                 ((ApikineticData) oldData).saveNBTData(tag);
                 ((ApikineticData) newData).loadNBTData(tag);
             });
         });
+
+        oldPlayer.invalidateCaps();
     }
 }
 

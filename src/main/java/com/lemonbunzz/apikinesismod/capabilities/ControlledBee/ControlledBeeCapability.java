@@ -15,6 +15,7 @@ public class ControlledBeeCapability {
     public static Capability<ControlledBeeData> CONTROLLED = null;
 
     @SubscribeEvent
+    @SuppressWarnings({"'ResourceLocation(java.lang.String, java.lang.String)' is deprecated since version 1.20.6 and marked for removal"})
     public static void attachControlledBeeCapability(AttachCapabilitiesEvent<Entity> event) {
         if (event.getObject() instanceof Bee) {
             CONTROLLED = CapabilityManager.get(new CapabilityToken<>() {});

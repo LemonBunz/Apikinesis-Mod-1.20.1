@@ -1,10 +1,12 @@
 package com.lemonbunzz.apikinesismod.capabilities.ControlledBee;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.animal.Bee;
 
 import java.util.UUID;
 
 public class ControlledBeeData {
+
     private boolean isControlled;
     private UUID controlledBy;
 
@@ -18,7 +20,7 @@ public class ControlledBeeData {
     public UUID getControlledBy() {
         return this.controlledBy;
     }
-    public void getControlledBy(UUID newOwnerUuid){
+    public void setControlledBy(UUID newOwnerUuid){
         this.controlledBy = newOwnerUuid;
     }
 
