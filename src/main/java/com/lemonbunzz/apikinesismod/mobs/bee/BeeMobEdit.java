@@ -5,9 +5,12 @@ import com.lemonbunzz.apikinesismod.ApikinesisMod;
 import com.lemonbunzz.apikinesismod.capabilities.Apikinetic.ApikineticCapability;
 import com.lemonbunzz.apikinesismod.capabilities.Apikinetic.ApikineticData;
 import com.lemonbunzz.apikinesismod.capabilities.ControlledBee.ControlledBeeCapability;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.ai.goal.WrappedGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
@@ -24,8 +27,11 @@ public class BeeMobEdit {
     @SubscribeEvent
     public static void onEntityJoin(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof Bee bee) {
+
+            removeGoalWithNameContaining(bee.targetSelector,"BeeHurtByOtherGoal");
+
             alterBeeBehavior(bee);
-            removeGoalWithNameContaining(bee.targetSelector,"BecomeAngry");
+
             Set<WrappedGoal> goalsCopy = new HashSet<>(bee.targetSelector.getAvailableGoals());
             for (WrappedGoal wrapped : goalsCopy) {
                 Goal goal = wrapped.getGoal();
@@ -43,7 +49,7 @@ public class BeeMobEdit {
 
     private static void alterBeeBehavior(Bee bee) {
         bee.goalSelector.addGoal(1, new BeeFollowApikineticGoal(bee, 1.0D, 5.0F, 2.0F));
-
+        //bee.targetSelector.addGoal(1, (new BeeHurtByApikineticTargetGoal(bee)).setAlertOthers());
     }
 
     public static void removeGoalWithNameContaining(GoalSelector selector, String containsName) {
@@ -107,5 +113,25 @@ class BeeFollowApikineticGoal extends Goal {
     @Override
     public boolean canContinueToUse() {
         return target != null && bee.distanceToSqr(target) < (maxDist * maxDist);
+    }
+}
+
+
+class BeeHurtByApikineticTargetGoal extends HurtByTargetGoal {
+    private final Bee bee;
+    BeeHurtByApikineticTargetGoal(Bee pMob)
+    {
+        super(pMob);
+        this.bee = pMob;
+    }
+    @Override
+    public boolean canContinueToUse() {
+        return this.bee.isAngry() && super.canContinueToUse();
+    }
+    @Override
+    protected void alertOther(Mob pMob, LivingEntity pTarget) {
+        if (pMob instanceof Bee && this.mob.hasLineOfSight(pTarget)) {
+            pMob.setTarget(pTarget);
+        }
     }
 }
