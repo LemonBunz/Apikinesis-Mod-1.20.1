@@ -17,6 +17,7 @@ import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.EntityLeaveLevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,7 +28,8 @@ public class BeeMobEdit {
     @SubscribeEvent
     public static void onEntityJoin(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof Bee bee) {
-
+            //Reason: Remove
+            //Reason: Replace
             removeGoalWithNameContaining(bee.targetSelector,"BeeHurtByOtherGoal");
 
             alterBeeBehavior(bee);
@@ -49,7 +51,7 @@ public class BeeMobEdit {
 
     private static void alterBeeBehavior(Bee bee) {
         bee.goalSelector.addGoal(1, new BeeFollowApikineticGoal(bee, 1.0D, 5.0F, 2.0F));
-        //bee.targetSelector.addGoal(1, (new BeeHurtByApikineticTargetGoal(bee)).setAlertOthers());
+        bee.targetSelector.addGoal(1, (new BeeHurtByApikineticTargetGoal(bee)).setAlertOthers(new Class[0]));
     }
 
     public static void removeGoalWithNameContaining(GoalSelector selector, String containsName) {
@@ -88,7 +90,6 @@ class BeeFollowApikineticGoal extends Goal {
                     .orElse(false);
 
             if (isApikinetic) {
-
                 boolean isControlledByPlayer = bee.getCapability(ControlledBeeCapability.CONTROLLED)
                         .map(controlled -> controlled.getControlledBy() != null
                                 && controlled.getControlledBy().equals(thisPlayer.getUUID()))
@@ -119,6 +120,7 @@ class BeeFollowApikineticGoal extends Goal {
 
 class BeeHurtByApikineticTargetGoal extends HurtByTargetGoal {
     private final Bee bee;
+
     BeeHurtByApikineticTargetGoal(Bee pMob)
     {
         super(pMob);
@@ -128,10 +130,21 @@ class BeeHurtByApikineticTargetGoal extends HurtByTargetGoal {
     public boolean canContinueToUse() {
         return this.bee.isAngry() && super.canContinueToUse();
     }
+
     @Override
-    protected void alertOther(Mob pMob, LivingEntity pTarget) {
+    protected void alertOther(@NotNull Mob pMob, @NotNull LivingEntity pTarget) {
         if (pMob instanceof Bee && this.mob.hasLineOfSight(pTarget)) {
-            pMob.setTarget(pTarget);
+            boolean isControlled = this.bee.getCapability(ControlledBeeCapability.CONTROLLED).map(controlled ->
+                    controlled.getControlledBy() != null)
+                    .orElse(false);
+
+            if (isControlled) { //If the bee is owned
+                //ignore for now;
+            } else {  //If the bee is owned
+                pMob.setTarget(pTarget);
+            }
+
         }
     }
+
 }

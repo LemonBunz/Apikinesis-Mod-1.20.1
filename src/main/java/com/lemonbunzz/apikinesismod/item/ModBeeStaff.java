@@ -35,7 +35,7 @@ public class ModBeeStaff extends Item {
                             data.setEnergyPoint(ep - epCost);
                             //test section
                             data.controlBee(newBee, player.getUUID());
-                            newBee.setTarget(player);
+//                            newBee.setTarget(player);
                             newBee.getCapability(ControlledBeeCapability.CONTROLLED).ifPresent(controlled -> {
                                 String controlledby = controlled.getControlledBy() != null ? controlled.getControlledBy().toString() : "no owner";
                                 player.sendSystemMessage(Component.literal(
