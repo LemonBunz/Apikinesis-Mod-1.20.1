@@ -9,6 +9,7 @@ Planned Features:
   - Command Bees
   - Summon Swarm
   - More...
+- Automation (via Bees)
 - Bee Personalities and Emotions.
 - Bee Variants
 - Maybe more... Whatever. 
