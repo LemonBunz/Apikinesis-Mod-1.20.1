@@ -6,7 +6,6 @@ import net.minecraft.world.entity.animal.Bee;
 import java.util.UUID;
 
 public class ControlledBeeData {
-
     private boolean isControlled;
     private UUID controlledBy;
 

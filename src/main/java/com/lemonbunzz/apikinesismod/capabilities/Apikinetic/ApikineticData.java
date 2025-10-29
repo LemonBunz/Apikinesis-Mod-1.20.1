@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public class  ApikineticData implements IApikinetic {
 
-    private UUID player;
     private boolean isApikinetic = false;
     private int energyPoint = 100;
     private int maxEnergyPoint = 100;

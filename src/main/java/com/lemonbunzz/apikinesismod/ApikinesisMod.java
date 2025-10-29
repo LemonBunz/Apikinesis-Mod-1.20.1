@@ -30,14 +30,20 @@ public class ApikinesisMod
         //Items
         ModItems.register(modEventBus);
         ModToolsCreativeTabs.register(modEventBus);
+        //ModSkills.register(modEventBus);
+
         MinecraftForge.EVENT_BUS.register(this);
 
         modEventBus.addListener(ModItems::addCreative);
-
+        //modEventBus.addListener(ModSkills::addSkills);
         forgeEventbus.addListener(ApikinesisMod::onRegisterCommands);
 
         //unwanted Child
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+    }
+
+    public static Logger getLOGGER() {
+        return LOGGER;
     }
 
     @SubscribeEvent

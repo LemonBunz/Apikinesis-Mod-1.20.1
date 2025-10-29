@@ -29,6 +29,7 @@ public class BeeMobEdit {
     public static void onEntityJoin(EntityJoinLevelEvent event) {
         if (event.getEntity() instanceof Bee bee) {
             //Reason: Remove
+
             //Reason: Replace
             removeGoalWithNameContaining(bee.targetSelector,"BeeHurtByOtherGoal");
 
@@ -50,7 +51,7 @@ public class BeeMobEdit {
     }
 
     private static void alterBeeBehavior(Bee bee) {
-        bee.goalSelector.addGoal(1, new BeeFollowApikineticGoal(bee, 1.0D, 5.0F, 2.0F));
+        bee.goalSelector.addGoal(10, new BeeFollowApikineticGoal(bee, 1.0D, 5.0F, 2.0F));
         bee.targetSelector.addGoal(1, (new BeeHurtByApikineticTargetGoal(bee)).setAlertOthers(new Class[0]));
     }
 
@@ -65,6 +66,8 @@ public class BeeMobEdit {
         }
     }
 }
+
+
 
 class BeeFollowApikineticGoal extends Goal {
     private final Bee bee;
@@ -106,8 +109,23 @@ class BeeFollowApikineticGoal extends Goal {
 
     @Override
     public void tick() {
-        if (target != null && bee.distanceToSqr(target) > (minDist * minDist)) {
-            bee.getNavigation().moveTo(target, speed);
+        if (target != null) {
+            double distanceSq = bee.distanceToSqr(target);
+
+            // Minimum distance to stop moving toward the player
+            double safeDistance = minDist;
+
+            // If the target is a player, add extra buffer to prevent bumping
+            if (target != null) {
+                safeDistance += 0.5; // 0.5 blocks buffer
+            }
+
+            if (distanceSq > (safeDistance * safeDistance)) {
+                bee.getNavigation().moveTo(target, speed);
+            } else {
+                // Stop the bee when within safe distance
+                bee.getNavigation().stop();
+            }
         }
     }
 
@@ -134,14 +152,25 @@ class BeeHurtByApikineticTargetGoal extends HurtByTargetGoal {
     @Override
     protected void alertOther(@NotNull Mob pMob, @NotNull LivingEntity pTarget) {
         if (pMob instanceof Bee && this.mob.hasLineOfSight(pTarget)) {
+            //this.bee = bee that got hurt
+            //pMob are the surrounding bees, not the bee that got hurt
             boolean isControlled = this.bee.getCapability(ControlledBeeCapability.CONTROLLED).map(controlled ->
                     controlled.getControlledBy() != null)
                     .orElse(false);
 
-            if (isControlled) { //If the bee is owned
-                //ignore for now;
-            } else {  //If the bee is owned
+            boolean isTheAttackerOwner = pMob.getCapability(ControlledBeeCapability.CONTROLLED).map(controlled ->
+                            controlled.getControlledBy() != pTarget.getUUID())
+                    .orElse(false);
+
+            if (!isControlled && isTheAttackerOwner) { //If the bee not is owned
+                //pMob = Outsider bees
                 pMob.setTarget(pTarget);
+            } else {  //If the bee  is owned
+                //pMob = Ally/Owned bees
+
+                //TODO: this is temporary; ignore owner when bee is attacked;
+                this.bee.setTarget(null);
+                //pMob.setTarget(pTarget); --This is unnecessary but it's here anyways...
             }
 
         }
