@@ -1,4 +1,4 @@
-package com.lemonbunzz.apikinesismod.setup;
+package com.lemonbunzz.apikinesismod.client;
 
 import com.lemonbunzz.apikinesismod.ApikinesisMod;
 import com.lemonbunzz.apikinesismod.Config;

@@ -159,17 +159,17 @@ class BeeHurtByApikineticTargetGoal extends HurtByTargetGoal {
                     .orElse(false);
 
             boolean isTheAttackerOwner = pMob.getCapability(ControlledBeeCapability.CONTROLLED).map(controlled ->
-                            controlled.getControlledBy() != pTarget.getUUID())
+                            controlled.getControlledBy() == pTarget.getUUID())
                     .orElse(false);
 
-            if (!isControlled && isTheAttackerOwner) { //If the bee not is owned
+            if (!isControlled && !isTheAttackerOwner) { //If the bee not is owned
                 //pMob = Outsider bees
                 pMob.setTarget(pTarget);
             } else {  //If the bee  is owned
                 //pMob = Ally/Owned bees
-
                 //TODO: this is temporary; ignore owner when bee is attacked;
                 this.bee.setTarget(null);
+
                 //pMob.setTarget(pTarget); --This is unnecessary but it's here anyways...
             }
 

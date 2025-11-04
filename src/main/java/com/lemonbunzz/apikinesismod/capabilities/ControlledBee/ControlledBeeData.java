@@ -1,19 +1,19 @@
 package com.lemonbunzz.apikinesismod.capabilities.ControlledBee;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.entity.animal.Bee;
 
 import java.util.UUID;
 
 public class ControlledBeeData {
-    private boolean isControlled;
-    private UUID controlledBy;
+    private boolean isControlled = false;
+    private UUID controlledBy = null;
 
-    public boolean getIsControlled() {
+    public boolean IsControlled() {
         return this.isControlled;
     }
     public void setIsControlled(boolean value) {
         this.isControlled = value;
+        System.out.println("The bee is no longer controlled");
     };
 
     public UUID getControlledBy() {
@@ -21,6 +21,7 @@ public class ControlledBeeData {
     }
     public void setControlledBy(UUID newOwnerUuid){
         this.controlledBy = newOwnerUuid;
+        System.out.println("Removed the controller");
     }
 
     // Save data to NBT
@@ -35,7 +36,7 @@ public class ControlledBeeData {
 
     // Load data from NBT
     public void loadNBTData(CompoundTag tag) {
-        isControlled = tag.getBoolean("isControlled");
-        controlledBy = tag.getUUID("controlledBy");
+        this.isControlled = tag.getBoolean("isControlled");
+        this.controlledBy = tag.getUUID("controlledBy");
     }
 }

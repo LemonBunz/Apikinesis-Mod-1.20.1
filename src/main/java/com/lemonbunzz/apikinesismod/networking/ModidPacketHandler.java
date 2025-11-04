@@ -15,14 +15,15 @@ public class ModidPacketHandler  {
             PROTOCOL_VERSION::equals
     );
 
+
     private static int packetId = 0;
     public static void registerPackets() {
         CHANNEL.registerMessage(
                 packetId++,
-                ActivateSkillPacket.class,
-                ActivateSkillPacket::encode,
-                ActivateSkillPacket::decode,
-                ActivateSkillPacket::handle
+                SkillCastPacket.class,
+                SkillCastPacket::encode,
+                SkillCastPacket::decode,
+                SkillCastPacket::handle
         );
 
         //TODO: REGISTER MORE HERE!!!!!!!!

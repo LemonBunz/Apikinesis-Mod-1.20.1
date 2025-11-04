@@ -30,16 +30,16 @@ public class ModBeeStaff extends Item {
                     if (data.getEnergyPoint() >= epCost) {
                         Bee newBee = EntityType.BEE.create(level);
                         if (newBee != null) {
-                            newBee.moveTo(player.getX(), player.getY() + 1, player.getZ(), player.getYRot(), 0);
                             level.addFreshEntity(newBee);
-                            data.setEnergyPoint(ep - epCost);
+                            data.setEnergyPoint(ep - epCost);newBee.moveTo(player.getX(), player.getY() + 1, player.getZ(), player.getYRot(), 0);
+
                             //test section
                             data.controlBee(newBee, player.getUUID());
 //                            newBee.setTarget(player);
                             newBee.getCapability(ControlledBeeCapability.CONTROLLED).ifPresent(controlled -> {
                                 String controlledby = controlled.getControlledBy() != null ? controlled.getControlledBy().toString() : "no owner";
                                 player.sendSystemMessage(Component.literal(
-                                        "[Debug] Cntrolled By " + controlledby +  " " + controlled.getIsControlled()
+                                        "[Debug] Cntrolled By " + controlledby +  " " + controlled.IsControlled()
                                 ));
                             });
                         }

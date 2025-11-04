@@ -49,9 +49,21 @@ public class  ApikineticData implements IApikinetic {
         if (!availableBees.canControlMoreBees()) return;
 
         bee.getCapability(ControlledBeeCapability.CONTROLLED).ifPresent(controlled -> {
-            controlled.setIsControlled(true);
-            controlled.setControlledBy(controllerUuid);
-            this.availableBees.register(bee.getUUID());
+            if (!controlled.IsControlled()) {
+                controlled.setIsControlled(true);
+                controlled.setControlledBy(controllerUuid);
+                this.availableBees.register(bee.getUUID());
+            }
+        });
+    }
+
+    public void uncontrolBee(Bee bee) {
+        if (!availableBees.canControlMoreBees()) return;
+        bee.getCapability(ControlledBeeCapability.CONTROLLED).ifPresent(controlled -> {
+            if (controlled.IsControlled() && controlled.getControlledBy() != null) {
+                controlled.setIsControlled(false);
+                controlled.setControlledBy(null);
+            }
         });
     }
 

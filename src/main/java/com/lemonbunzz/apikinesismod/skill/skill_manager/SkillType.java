@@ -1,4 +1,4 @@
-package com.lemonbunzz.apikinesismod.skills.skillmanager;
+package com.lemonbunzz.apikinesismod.skill.skill_manager;
 
 public enum SkillType {
     NONE,

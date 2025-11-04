@@ -12,18 +12,25 @@ import org.lwjgl.glfw.GLFW;
 
 @Mod.EventBusSubscriber(modid = ApikinesisMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = net.minecraftforge.api.distmarker.Dist.CLIENT)
 public class KeyMappings {
-    public static final String CATEGORY = "key.categories.skill";
-    public static KeyMapping ACTIVATE_POWER;
-
+    public static final String CATEGORY = "key.categories.apikinesismod";
+    public static KeyMapping PREVIOUS_SKILL;
+    public static KeyMapping NEXT_SKILL;
     @SubscribeEvent
     public static void registerKeyMappings(RegisterKeyMappingsEvent event) {
-        ACTIVATE_POWER = new KeyMapping(
-               "key.apikinesismod.activate_selected_skill",
+        PREVIOUS_SKILL= new KeyMapping(
+               "key.apikinesismod.previous_skill",
                 InputConstants.Type.KEYSYM,
-                GLFW.GLFW_KEY_G, // Default key is G
+                GLFW.GLFW_KEY_G,
+                CATEGORY
+        );
+        NEXT_SKILL= new KeyMapping(
+                "key.apikinesismod.next_skill",
+                InputConstants.Type.KEYSYM,
+                GLFW.GLFW_KEY_H,
                 CATEGORY
         );
 
-        event.register(ACTIVATE_POWER);
+        event.register(PREVIOUS_SKILL);
+        event.register(NEXT_SKILL);
     }
 }
